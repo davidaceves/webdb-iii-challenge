@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
     db('cohorts')
         .then(cohorts => {
-            res.status(200).json(cohorts)
+            res.status(200).json(cohorts);
         })
         .catch(err => {
             console.log(err);
@@ -40,7 +40,7 @@ router.get('/:id', (req, res) => {
     db('cohorts')
         .where({ id: req.params.id })
         .then(cohort => {
-            res.status(200).json(cohort)
+            res.status(200).json(cohort);
         })
         .catch(err => {
             console.log(err)
@@ -52,10 +52,52 @@ router.get('/:id/students', (req, res) => {
     db('students')
         .where({ cohort_id: req.params.id })
         .then(cohort => {
-            res.status(200).json(cohort)
+            res.status(200).json(cohort);
         })
         .catch(err => {
             console.log(err)
+            res.status(500).json(err);
+        })
+})
+
+router.put('/:id', (req, res) => {
+    db('cohorts')
+        .where({ id: req.params.id })
+        .update(req.body)
+        .then(cohort => {
+            if(!cohort) {
+                res.status(404).json({
+                    message: "Cohort does not exist."
+                })
+                return;
+            } else {
+                res.status(201).json(cohort);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err)
+        })
+})
+
+router.delete('/:id', (req, res) => {
+    db('cohorts')
+        .where({ id: req.params.id })
+        .del()
+        .then(cohort => {
+            if(!cohort) {
+                res.status(404).json({
+                    message: "Cohort does not exists."
+                })
+                return;
+            } else {
+                res.status(200).json({
+                    message: "Cohort has been deleted."
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err);
             res.status(500).json(err);
         })
 })
