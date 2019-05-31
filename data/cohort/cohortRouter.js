@@ -48,4 +48,18 @@ router.get('/:id', (req, res) => {
         })
 })
 
+router.get('/:id/students', (req, res) => {
+    db('students')
+        .where({ cohort_id: req.params.id })
+        .then(cohort => {
+            res.status(200).json(cohort)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err);
+        })
+})
+
+
+
 module.exports = router;
