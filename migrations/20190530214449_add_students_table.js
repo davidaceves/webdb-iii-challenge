@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       tbl
         .string('name', 255)
         .notNullable();
-        
+
       tbl
         .integer('student_id')
         .unsigned()
@@ -16,5 +16,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  
+    return knex.schema.dropTableIfExists('students');
 };
